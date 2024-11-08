@@ -31,7 +31,9 @@ public class UsersController {
 
     @Operation(
             summary = "Create a new user",
-            description = "This endpoint allows creating a new user owner. The owner information must be provided in the request body. A successful creation will return HTTP status 201 and a success message."
+            description = "This endpoint allows creating a new user owner. The owner information must be provided in the request body. A successful creation will return HTTP status 201 and a success message.\n\n"
+                    +     "Whoever requests this service must be an admin, otherwise the employee will not be allowed to be created"
+
     )
     @ApiResponses(value = {
             @ApiResponse(
@@ -42,6 +44,11 @@ public class UsersController {
             @ApiResponse(
                     responseCode = "400",
                     description = "Bad request due to invalid user input",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Inauthorize for y this service",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
             )
     })
@@ -79,5 +86,34 @@ public class UsersController {
         UserResponseDto response=mapperResponse.toUserResponse(user);
         if(user != null)response.setRol(user.getRol().toString());
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @Operation(
+            summary = "Create a new employee",
+            description = "This endpoint allows creating a new user employee. The employee information must be provided in the request body. A successful creation will return HTTP status 201 and a success message.\n\n"
+                    +     "Whoever requests this service must be an owner, otherwise the employee will not be allowed to be created"
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "User created successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Bad request due to invalid user input",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            ),
+            @ApiResponse(
+                    responseCode = "401",
+                    description = "Inauthorize for y this service",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
+            )
+    })
+    @PreAuthorize("hasRole('OWNER')")
+    @PostMapping("/create/employee")
+    public ResponseEntity<String> createNewEmploye(@Valid @RequestBody UserRequestDto request){
+        service.createEmployee(mapper.userRequestDtoToUser(request));
+        return ResponseEntity.ok(InfraConstants.CREATE_EMPLOYEE_SUCCES);
     }
 }

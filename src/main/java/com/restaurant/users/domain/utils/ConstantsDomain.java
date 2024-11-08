@@ -34,5 +34,6 @@ public final class ConstantsDomain {
     public static final String NOT_EXIST=" not exist";
     public static final String NOT_HAVE_OWNER_ROL=" not have the rol owner";
     public static final String ROLE="ROLE_";
+    public static final String EMAIL_EXIST="the email is al ready exist";
 }
 
