@@ -8,5 +8,6 @@ public interface IUserPersistencePort {
 void  saveUser (User request);
 User findByUserID(int id);
 Optional<User> findByEmail(String email);
+Integer getUserId();
 
 }

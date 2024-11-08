@@ -82,6 +82,11 @@ public class JwtService {
             e.printStackTrace();
             return Jwts.claims();
         }
+
+    }
+
+    public Integer extractUserId(String token) {
+        return extractClaim(token, claims -> claims.get("id", Integer.class));
     }
 
     private boolean isTokenExpired(String token) {

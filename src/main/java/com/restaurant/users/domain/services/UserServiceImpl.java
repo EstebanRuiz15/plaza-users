@@ -39,9 +39,21 @@ private final IUserPersistencePort persistance;
         persistance.saveUser(request);
     }
 
+    @Override
+    public Integer getUserId() {
+        return persistance.getUserId();
+    }
+
+    @Override
+    public void createEmployee(User user) {
+        isValidParams(user);
+        user.setRol(RoleEnum.EMPLOYEE);
+        persistance.saveUser(user);
+    }
+
     private void isValidParams(User user){
         Optional<User> userr= persistance.findByEmail(user.getEmail());
-        if(userr.isPresent()) throw new ErrorExceptionParam("the email is al ready exist");
+        if(userr.isPresent()) throw new ErrorExceptionParam(ConstantsDomain.EMAIL_EXIST);
 
         String regex = ConstantsDomain.REGEX_PASSWORD;
         Pattern pattern = Pattern.compile(regex);

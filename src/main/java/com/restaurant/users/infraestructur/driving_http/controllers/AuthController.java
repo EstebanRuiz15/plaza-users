@@ -115,6 +115,11 @@ public class AuthController {
         return ResponseEntity.ok(Boolean.TRUE);
     }
 
+    @GetMapping("/userId")
+    public ResponseEntity<Integer> getIdUser(){
+        return ResponseEntity.ok(userService.getUserId());
+    }
+
 
 }
 

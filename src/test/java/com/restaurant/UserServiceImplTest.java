@@ -10,11 +10,13 @@ import com.restaurant.users.domain.utils.ConstantsDomain;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -199,5 +201,68 @@ class UserServiceImplTest {
             userService.saveNewClient(validUser);
         });
         assertEquals("Invalid date of birth", exception.getMessage());
+    }
+
+    @Test
+    void createEmployee_Success() {
+        when(persistencePort.findByEmail(validUser.getEmail())).thenReturn(Optional.empty());
+
+        userService.createEmployee(validUser);
+
+        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+        verify(persistencePort).saveUser(userCaptor.capture());
+        User savedUser = userCaptor.getValue();
+
+        assertEquals(RoleEnum.EMPLOYEE, savedUser.getRol());
+        assertEquals(validUser.getEmail(), savedUser.getEmail());
+        assertEquals(validUser.getPassword(), savedUser.getPassword());
+    }
+
+    @Test
+    void createEmployee_EmailExists() {
+        when(persistencePort.findByEmail(validUser.getEmail())).thenReturn(Optional.of(new User()));
+
+        ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
+            userService.createEmployee(validUser);
+        });
+
+        assertEquals(ConstantsDomain.EMAIL_EXIST, exception.getMessage());
+        verify(persistencePort, never()).saveUser(any(User.class));
+    }
+
+    @Test
+    void createEmployee_InvalidPassword() {
+        validUser.setPassword("invalid");
+
+        ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
+            userService.createEmployee(validUser);
+        });
+
+        assertEquals(ConstantsDomain.PASSWORD_INVALID, exception.getMessage());
+        verify(persistencePort, never()).saveUser(any(User.class));
+    }
+
+    @Test
+    void createEmployee_InvalidBirthDate() {
+        validUser.setBirthDay(new Date(120, Calendar.JANUARY, 1));
+
+        ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
+            userService.createEmployee(validUser);
+        });
+
+        assertEquals(ConstantsDomain.ERROR_MESSAGE_BIRTHDATE, exception.getMessage());
+        verify(persistencePort, never()).saveUser(any(User.class));
+    }
+
+    @Test
+    void createEmployee_InvalidBirthDate_TooOld() {
+        validUser.setBirthDay(new Date(10, Calendar.JANUARY, 1)); // Year 1910
+
+        ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
+            userService.createEmployee(validUser);
+        });
+
+        assertEquals(ConstantsDomain.ERROR_MESSAGE_BIRTHDATE, exception.getMessage());
+        verify(persistencePort, never()).saveUser(any(User.class));
     }
 }
