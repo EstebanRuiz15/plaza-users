@@ -4,7 +4,6 @@ import com.restaurant.users.domain.model.User;
 import com.restaurant.users.infraestructur.driving_http.dtos.request.UserRequestDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.stereotype.Service;
 
 @Mapper(componentModel = "spring")
 public interface IUserRequestMapper {

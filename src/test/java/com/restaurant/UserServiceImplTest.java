@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Calendar;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -52,7 +53,7 @@ class UserServiceImplTest {
         userService.saveUserOwner(validUser);
 
         assertEquals(RoleEnum.OWNER, validUser.getRol());
-        verify(persistencePort).saveUserOwner(validUser);
+        verify(persistencePort).saveUser(validUser);
     }
 
     @Test
@@ -65,7 +66,7 @@ class UserServiceImplTest {
                 () -> userService.saveUserOwner(validUser)
         );
         assertEquals(ConstantsDomain.PASSWORD_INVALID, exception.getMessage());
-        verify(persistencePort, never()).saveUserOwner(any(User.class));
+        verify(persistencePort, never()).saveUser(any(User.class));
     }
 
     @Test
@@ -80,7 +81,7 @@ class UserServiceImplTest {
                 () -> userService.saveUserOwner(validUser)
         );
         assertEquals(ConstantsDomain.ERROR_MESSAGE_BIRTHDATE, exception.getMessage());
-        verify(persistencePort, never()).saveUserOwner(any(User.class));
+        verify(persistencePort, never()).saveUser(any(User.class));
     }
 
     @Test
@@ -95,7 +96,7 @@ class UserServiceImplTest {
                 () -> userService.saveUserOwner(validUser)
         );
         assertEquals(ConstantsDomain.ERROR_MESSAGE_BIRTHDATE, exception.getMessage());
-        verify(persistencePort, never()).saveUserOwner(any(User.class));
+        verify(persistencePort, never()).saveUser(any(User.class));
     }
 
     @Test
@@ -108,7 +109,7 @@ class UserServiceImplTest {
         userService.saveUserOwner(validUser);
 
         assertEquals(RoleEnum.OWNER, validUser.getRol());
-        verify(persistencePort).saveUserOwner(validUser);
+        verify(persistencePort).saveUser(validUser);
     }
 
     @Test
@@ -119,7 +120,7 @@ class UserServiceImplTest {
         userService.saveUserOwner(validUser);
 
         assertEquals(RoleEnum.OWNER, validUser.getRol());
-        verify(persistencePort).saveUserOwner(validUser);
+        verify(persistencePort).saveUser(validUser);
     }
 
 
@@ -146,5 +147,57 @@ class UserServiceImplTest {
 
         assertNull(result);
         verify(persistencePort).findByUserID(userId);
+    }
+    @Test
+    void testSaveNewClient_Success() {
+        when(persistencePort.findByEmail(validUser.getEmail())).thenReturn(Optional.empty());
+
+        userService.saveNewClient(validUser);
+
+        verify(persistencePort, times(1)).saveUser(validUser);
+    }
+
+    @Test
+    void testSaveNewClient_EmailAlreadyExists() {
+        when(persistencePort.findByEmail(validUser.getEmail())).thenReturn(Optional.of(validUser));
+
+        ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
+            userService.saveNewClient(validUser);
+        });
+        assertEquals("the email is al ready exist", exception.getMessage());
+    }
+
+    @Test
+    void testSaveNewClient_InvalidPassword() {
+        validUser.setPassword("123");
+
+        ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
+            userService.saveNewClient(validUser);
+        });
+        assertEquals("The password must have at least 8 characters, a capital letter and a number", exception.getMessage());
+    }
+
+    @Test
+    void testSaveNewClient_AgeLessThanTen() {
+        Calendar birthDate = Calendar.getInstance();
+        birthDate.add(Calendar.YEAR, -5);
+        validUser.setBirthDay(birthDate.getTime());
+
+        ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
+            userService.saveNewClient(validUser);
+        });
+        assertEquals("Invalid date of birth", exception.getMessage());
+    }
+
+    @Test
+    void testSaveNewClient_AgeGreaterThanHundred() {
+        Calendar birthDate = Calendar.getInstance();
+        birthDate.add(Calendar.YEAR, -105);
+        validUser.setBirthDay(birthDate.getTime());
+
+        ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
+            userService.saveNewClient(validUser);
+        });
+        assertEquals("Invalid date of birth", exception.getMessage());
     }
 }
