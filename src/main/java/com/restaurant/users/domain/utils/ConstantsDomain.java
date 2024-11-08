@@ -25,7 +25,7 @@ public final class ConstantsDomain {
 
     public static final String PASSWORD_EMPTY = "Password cannot be empty.";
     public static final String PASSWORD_INVALID = "The password must have at least 8 characters, a capital letter and a number";
-    public static final String ONLY_LETTERS= "^[A-Za-z]+$";
+    public static final String ONLY_LETTERS= "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$";
     public static final String CEL_PHONE_REGEX = "^\\+?\\d{1,13}$";
     public static final Integer EIGHT = 8;
     public static final String REGEX_PASSWORD="^(?=.*[A-Z])(?=.*\\d).{8,}$";
@@ -33,5 +33,6 @@ public final class ConstantsDomain {
     public static final String ERROR_USER="The user ";
     public static final String NOT_EXIST=" not exist";
     public static final String NOT_HAVE_OWNER_ROL=" not have the rol owner";
+    public static final String ROLE="ROLE_";
 }
 

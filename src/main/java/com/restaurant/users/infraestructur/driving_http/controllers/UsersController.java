@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,6 +45,7 @@ public class UsersController {
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))
             )
     })
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/")
     public ResponseEntity<String> addProperty(@Valid @RequestBody UserRequestDto request) {
         service.saveUserOwner(mapper.userRequestDtoToUser(request));

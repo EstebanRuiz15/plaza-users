@@ -20,7 +20,7 @@ public class UserPersistenceImple implements IUserPersistencePort {
 
 
     @Override
-    public void saveUserOwner(User request) {
+    public void saveUser(User request) {
         UserEntity user=mapperToEntity.toUserEntity(request);
         String passEncoder= encoder.encode(user.getPassword());
         user.setPassword(passEncoder);
@@ -33,5 +33,11 @@ public class UserPersistenceImple implements IUserPersistencePort {
 
         return optionalUser.map(mapperToEntity::toUser)
                 .orElse(null);
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return repositoryJpa.findByEmail(email)
+                .map(mapperToEntity::toUser);
     }
 }

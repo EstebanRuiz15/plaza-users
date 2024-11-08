@@ -62,4 +62,17 @@ public class ControlAdvise {
 
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(ErrorNotAuthentication.class)
+    public ResponseEntity<?> handleAuthenticationException(RuntimeException ex,WebRequest request) {
+        Map<String, String> details = new HashMap<>();
+        details.put("error", ex.getMessage());
+
+        ExceptionResponse errorResponse = new ExceptionResponse(
+                HttpStatus.UNAUTHORIZED.value(),
+                ex.getMessage(),
+                details
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
 }

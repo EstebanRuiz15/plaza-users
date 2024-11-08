@@ -35,8 +35,7 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
-	implementation group: 'io.swagger.core.v3', name: 'swagger-annotations', version: '2.2.25'
-	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.8.0'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
 
 	testImplementation 'org.mockito:mockito-core:4.3.1'
 
@@ -49,6 +48,12 @@ dependencies {
 	implementation "org.springframework.security:spring-security-crypto"
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.0'
 
+
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+	implementation "org.springframework.security:spring-security-crypto"
+	testImplementation 'org.springframework.security:spring-security-test:5.8.1'
 
 }
 

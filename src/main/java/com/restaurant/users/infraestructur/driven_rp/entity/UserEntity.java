@@ -17,10 +17,10 @@ public class UserEntity {
     @Column(name="id")
     private Integer id;
 
-    @Column(name="nombre", nullable = false, unique = true)
+    @Column(name="nombre", nullable = false)
     private String name;
 
-    @Column (name="apellido",nullable=false, unique = true)
+    @Column (name="apellido",nullable=false)
     private String lastName;
 
     @Column (name= "Document", nullable = false)
