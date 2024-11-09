@@ -121,6 +121,10 @@ public class AuthController {
         return ResponseEntity.ok(userService.getUserId());
     }
 
+    @GetMapping("/validateToken")
+    public ResponseEntity<Boolean> validateToken(){
+        return ResponseEntity.ok(Boolean.TRUE);
+    }
 
 }
 
