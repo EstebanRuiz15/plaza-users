@@ -1,5 +1,6 @@
 package com.restaurant.users.infraestructur.driven_rp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.restaurant.users.domain.model.RoleEnum;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -41,8 +42,20 @@ public class UserEntity {
     @Column(name = "rol", nullable = false)
     private Enum<RoleEnum> rol;
 
+    @JsonIgnore
+    @Column(name = "rest_id")
+    private Integer rest_id;
+
     public Integer getId() {
         return id;
+    }
+
+    public Integer getRest_id() {
+        return rest_id;
+    }
+
+    public void setRest_id(Integer rest_id) {
+        this.rest_id = rest_id;
     }
 
     public void setId(Integer id) {

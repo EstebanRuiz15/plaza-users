@@ -2,8 +2,8 @@ package com.restaurant.users.infraestructur.driven_rp.adapter;
 
 import com.restaurant.users.domain.interfaces.IEncoderPort;
 import com.restaurant.users.domain.interfaces.IUserPersistencePort;
+import com.restaurant.users.domain.model.Employe;
 import com.restaurant.users.domain.model.User;
-import com.restaurant.users.domain.utils.ConstantsDomain;
 import com.restaurant.users.infraestructur.driven_rp.entity.UserEntity;
 import com.restaurant.users.infraestructur.driven_rp.mapper.IMapperUserToEntity;
 import com.restaurant.users.infraestructur.driven_rp.persistence.UsersJpaRepository;
@@ -55,5 +55,22 @@ public class UserPersistenceImple implements IUserPersistencePort {
         String jwt = request.getHeader(InfraConstants.AUTHORIZATION);
         jwt = jwt.substring(InfraConstants.SEVEN);
         return jwtService.extractUserId(jwt);
+    }
+
+    @Override
+    public void saveUserEmployee(User request, Integer RestId) {
+        UserEntity user=mapperToEntity.toUserEntity(request);
+        String passEncoder= encoder.encode(user.getPassword());
+        user.setPassword(passEncoder);
+        user.setRest_id(RestId);
+        repositoryJpa.save(user);
+    }
+
+    @Override
+    public Employe findByEmployeID(int id) {
+        Optional<UserEntity> optionalUser = repositoryJpa.findById(id);
+
+        return optionalUser.map(mapperToEntity::toEmploye)
+                .orElse(null);
     }
 }
