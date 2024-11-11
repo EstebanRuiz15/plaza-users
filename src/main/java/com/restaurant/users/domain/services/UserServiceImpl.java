@@ -3,6 +3,7 @@ package com.restaurant.users.domain.services;
 import com.restaurant.users.domain.exception.ErrorExceptionParam;
 import com.restaurant.users.domain.interfaces.IUserPersistencePort;
 import com.restaurant.users.domain.interfaces.IUserService;
+import com.restaurant.users.domain.model.Employe;
 import com.restaurant.users.domain.model.RoleEnum;
 import com.restaurant.users.domain.model.User;
 import com.restaurant.users.domain.utils.ConstantsDomain;
@@ -48,7 +49,14 @@ private final IUserPersistencePort persistance;
     public void createEmployee(User user) {
         isValidParams(user);
         user.setRol(RoleEnum.EMPLOYEE);
-        persistance.saveUser(user);
+        Integer restId=persistance.getUserId();
+        persistance.saveUserEmployee(user,restId);
+    }
+
+    @Override
+    public Employe getEmployee() {
+        Integer emloye=persistance.getUserId();
+        return persistance.findByEmployeID(emloye);
     }
 
     private void isValidParams(User user){

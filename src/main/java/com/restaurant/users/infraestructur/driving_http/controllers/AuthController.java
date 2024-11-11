@@ -6,6 +6,7 @@ import com.restaurant.users.infraestructur.driving_http.dtos.Security.Authentica
 import com.restaurant.users.infraestructur.driving_http.dtos.request.UserRequestDto;
 import com.restaurant.users.infraestructur.driving_http.mappers.IUserRequestMapper;
 import com.restaurant.users.infraestructur.security_config.AuthenticationService;
+import com.restaurant.users.infraestructur.util.InfraConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -69,7 +70,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register( @RequestBody @Valid UserRequestDto request) {
         userService.saveNewClient(mappertoUser.userRequestDtoToUser(request));
-        return ResponseEntity.ok("Register Client Successfull");
+        return ResponseEntity.ok(InfraConstants.CREATE_CLIENT_SUCCES);
     }
 
     @Operation(summary = "Validate if user has ADMIN role", description = "This endpoint checks if the user has the 'ADMIN' role. Returns true if authenticated as ADMIN, otherwise Unauthorized. This service is intended to be used via Feign from other microservices.")
@@ -120,6 +121,10 @@ public class AuthController {
         return ResponseEntity.ok(userService.getUserId());
     }
 
+    @GetMapping("/validateToken")
+    public ResponseEntity<Boolean> validateToken(){
+        return ResponseEntity.ok(Boolean.TRUE);
+    }
 
 }
 

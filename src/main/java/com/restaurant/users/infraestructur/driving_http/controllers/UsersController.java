@@ -1,6 +1,7 @@
 package com.restaurant.users.infraestructur.driving_http.controllers;
 
 import com.restaurant.users.domain.interfaces.IUserService;
+import com.restaurant.users.domain.model.Employe;
 import com.restaurant.users.domain.model.User;
 import com.restaurant.users.infraestructur.driving_http.dtos.request.UserRequestDto;
 import com.restaurant.users.infraestructur.driving_http.dtos.response.UserResponseDto;
@@ -115,5 +116,10 @@ public class UsersController {
     public ResponseEntity<String> createNewEmploye(@Valid @RequestBody UserRequestDto request){
         service.createEmployee(mapper.userRequestDtoToUser(request));
         return ResponseEntity.ok(InfraConstants.CREATE_EMPLOYEE_SUCCES);
+    }
+
+    @GetMapping("getEmploye")
+    public ResponseEntity<Employe> getEmploye(){
+        return ResponseEntity.ok(service.getEmployee());
     }
 }

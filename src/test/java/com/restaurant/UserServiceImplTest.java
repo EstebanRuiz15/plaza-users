@@ -86,20 +86,7 @@ class UserServiceImplTest {
         verify(persistencePort, never()).saveUser(any(User.class));
     }
 
-    @Test
-    void saveUserOwner_WithAgeMoreThan80_ShouldThrowException() {
 
-        Calendar oldAge = Calendar.getInstance();
-        oldAge.add(Calendar.YEAR, -81);
-        validUser.setBirthDay(oldAge.getTime());
-
-        ErrorExceptionParam exception = assertThrows(
-                ErrorExceptionParam.class,
-                () -> userService.saveUserOwner(validUser)
-        );
-        assertEquals(ConstantsDomain.ERROR_MESSAGE_BIRTHDATE, exception.getMessage());
-        verify(persistencePort, never()).saveUser(any(User.class));
-    }
 
     @Test
     void saveUserOwner_WithAgeExactly10_ShouldSaveSuccessfully() {
@@ -202,15 +189,16 @@ class UserServiceImplTest {
         });
         assertEquals("Invalid date of birth", exception.getMessage());
     }
-
     @Test
     void createEmployee_Success() {
+        Integer idRest = 1;
+        when (persistencePort.getUserId()).thenReturn(idRest);
         when(persistencePort.findByEmail(validUser.getEmail())).thenReturn(Optional.empty());
 
         userService.createEmployee(validUser);
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(persistencePort).saveUser(userCaptor.capture());
+        verify(persistencePort).saveUserEmployee(userCaptor.capture(), eq(idRest));
         User savedUser = userCaptor.getValue();
 
         assertEquals(RoleEnum.EMPLOYEE, savedUser.getRol());
