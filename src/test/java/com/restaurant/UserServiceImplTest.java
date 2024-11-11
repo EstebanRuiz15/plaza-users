@@ -4,6 +4,7 @@ package com.restaurant;
 import com.restaurant.users.domain.exception.ErrorExceptionParam;
 import com.restaurant.users.domain.interfaces.IServiceRestaurantFeig;
 import com.restaurant.users.domain.interfaces.IUserPersistencePort;
+import com.restaurant.users.domain.model.Employe;
 import com.restaurant.users.domain.model.RoleEnum;
 import com.restaurant.users.domain.model.User;
 import com.restaurant.users.domain.services.UserServiceImpl;
@@ -194,10 +195,11 @@ class UserServiceImplTest {
     @Test
     void createEmployee_Success() {
         Integer idRest = 1;
+        String rol= "Employe";
         when (persistencePort.getUserId()).thenReturn(idRest);
         when(persistencePort.findByEmail(validUser.getEmail())).thenReturn(Optional.empty());
         when(feignClient.getRestaurantIdtoIdOwner(idRest)).thenReturn(idRest);
-        userService.createEmployee(validUser);
+        userService.createEmployee(validUser, rol);
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         verify(persistencePort).saveUserEmployee(userCaptor.capture(), eq(idRest));
@@ -210,10 +212,11 @@ class UserServiceImplTest {
 
     @Test
     void createEmployee_EmailExists() {
+        String rol= "Employe";
         when(persistencePort.findByEmail(validUser.getEmail())).thenReturn(Optional.of(new User()));
 
         ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
-            userService.createEmployee(validUser);
+            userService.createEmployee(validUser, rol);
         });
 
         assertEquals(ConstantsDomain.EMAIL_EXIST, exception.getMessage());
@@ -222,10 +225,11 @@ class UserServiceImplTest {
 
     @Test
     void createEmployee_InvalidPassword() {
+        String rol= "Employe";
         validUser.setPassword("invalid");
 
         ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
-            userService.createEmployee(validUser);
+            userService.createEmployee(validUser,rol );
         });
 
         assertEquals(ConstantsDomain.PASSWORD_INVALID, exception.getMessage());
@@ -234,10 +238,11 @@ class UserServiceImplTest {
 
     @Test
     void createEmployee_InvalidBirthDate() {
+        String rol= "Employe";
         validUser.setBirthDay(new Date(120, Calendar.JANUARY, 1));
 
         ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
-            userService.createEmployee(validUser);
+            userService.createEmployee(validUser, rol);
         });
 
         assertEquals(ConstantsDomain.ERROR_MESSAGE_BIRTHDATE, exception.getMessage());
@@ -246,10 +251,11 @@ class UserServiceImplTest {
 
     @Test
     void createEmployee_InvalidBirthDate_TooOld() {
+        String rol= "Employe";
         validUser.setBirthDay(new Date(10, Calendar.JANUARY, 1)); // Year 1910
 
         ErrorExceptionParam exception = assertThrows(ErrorExceptionParam.class, () -> {
-            userService.createEmployee(validUser);
+            userService.createEmployee(validUser, rol);
         });
 
         assertEquals(ConstantsDomain.ERROR_MESSAGE_BIRTHDATE, exception.getMessage());

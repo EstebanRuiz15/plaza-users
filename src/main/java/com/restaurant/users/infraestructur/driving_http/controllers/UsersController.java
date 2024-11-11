@@ -113,13 +113,18 @@ public class UsersController {
     })
     @PreAuthorize("hasRole('OWNER')")
     @PostMapping("/create/employee")
-    public ResponseEntity<String> createNewEmploye(@Valid @RequestBody UserRequestDto request){
-        service.createEmployee(mapper.userRequestDtoToUser(request));
+    public ResponseEntity<String> createNewEmploye(@Valid @RequestBody UserRequestDto request, @RequestParam String rol){
+        service.createEmployee(mapper.userRequestDtoToUser(request), rol);
         return ResponseEntity.ok(InfraConstants.CREATE_EMPLOYEE_SUCCES);
     }
 
     @GetMapping("getEmploye")
     public ResponseEntity<Employe> getEmploye(){
         return ResponseEntity.ok(service.getEmployee());
+    }
+
+    @GetMapping("getChef")
+    public ResponseEntity<Employe> getEmployeChef(@RequestParam Integer idRestaurant){
+        return ResponseEntity.ok(service.getChefRestaurantId(idRestaurant));
     }
 }

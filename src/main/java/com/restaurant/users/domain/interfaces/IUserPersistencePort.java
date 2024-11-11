@@ -12,6 +12,7 @@ Optional<User> findByEmail(String email);
 Integer getUserId();
 void  saveUserEmployee (User request, Integer RestId);
 Employe findByEmployeID(int id);
+Employe getChefRestaurantId(Integer restId);
 
 
 }
