@@ -8,6 +8,8 @@ public interface IUserService {
     User getUser(Integer idUser);
     void saveNewClient(User request);
     Integer getUserId();
-    void createEmployee(User user);
+    void createEmployee(User user, String rol);
     Employe getEmployee();
+    Employe getChefRestaurantId(Integer restId);
+
 }

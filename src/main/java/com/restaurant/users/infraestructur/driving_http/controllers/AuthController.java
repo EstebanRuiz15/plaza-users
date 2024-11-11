@@ -123,7 +123,8 @@ public class AuthController {
 
     @GetMapping("/validateToken")
     public ResponseEntity<Boolean> validateToken(){
-        return ResponseEntity.ok(Boolean.TRUE);
+        Boolean response=Boolean.TRUE;
+        return ResponseEntity.ok(response);
     }
 
 }

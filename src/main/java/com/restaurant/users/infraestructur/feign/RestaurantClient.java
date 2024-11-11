@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Component
     @FeignClient(name = "plazoletaaplication", url = "${user.client.url}", configuration = FeignConfig.class)
     public interface RestaurantClient {
-        @GetMapping("getRestId")
+        @GetMapping("restaurant/getRestId")
         Integer getRestaurantOwnerId(@RequestParam Integer idOwner);
 
     }

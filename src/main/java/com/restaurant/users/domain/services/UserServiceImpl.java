@@ -49,9 +49,13 @@ private final IServiceRestaurantFeig feignClient;
     }
 
     @Override
-    public void createEmployee(User user) {
+    public void createEmployee(User user, String rol) {
         isValidParams(user);
-        user.setRol(RoleEnum.EMPLOYEE);
+        if(!rol.equalsIgnoreCase(RoleEnum.EMPLOYEE.toString()) && !rol.equalsIgnoreCase(RoleEnum.CHEF.toString()) ){
+            throw new ErrorExceptionParam(ConstantsDomain.ROL_INVALID);
+        }
+        if(rol.equalsIgnoreCase(RoleEnum.CHEF.toString())) user.setRol(RoleEnum.CHEF);
+        if(rol.equalsIgnoreCase(RoleEnum.EMPLOYEE.toString()))user.setRol(RoleEnum.EMPLOYEE);
         Integer OwnerId=persistance.getUserId();
         Integer restId=feignClient.getRestaurantIdtoIdOwner(OwnerId);
         if(restId == null)throw new ExceptionRestaurantNotFound(ConstantsDomain.REST_NOT_FOUND+OwnerId);
@@ -62,6 +66,11 @@ private final IServiceRestaurantFeig feignClient;
     public Employe getEmployee() {
         Integer emloye=persistance.getUserId();
         return persistance.findByEmployeID(emloye);
+    }
+
+    @Override
+    public Employe getChefRestaurantId(Integer restId) {
+        return persistance.getChefRestaurantId(restId);
     }
 
     private void isValidParams(User user){

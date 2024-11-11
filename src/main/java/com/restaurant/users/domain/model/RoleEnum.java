@@ -6,7 +6,8 @@ public enum RoleEnum {
     OWNER,
     CLIENT,
     ADMIN,
-    EMPLOYEE;
+    EMPLOYEE,
+    CHEF,;
     @JsonCreator
     public static RoleEnum fromString(String value) {
         return RoleEnum.valueOf(value.toUpperCase());

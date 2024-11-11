@@ -30,13 +30,11 @@ public final class ConstantsDomain {
     public static final Integer EIGHT = 8;
     public static final String REGEX_PASSWORD="^(?=.*[A-Z])(?=.*\\d).{8,}$";
     public static final String ERROR_MESSAGE_BIRTHDATE="Invalid date of birth";
-    public static final String ERROR_USER="The user ";
-    public static final String NOT_EXIST=" not exist";
-    public static final String NOT_HAVE_OWNER_ROL=" not have the rol owner";
     public static final String ROLE="ROLE_";
     public static final String EMAIL_EXIST="the email is al ready exist";
     public static final String COMUNICATION_ERROR_WITH_SERVICE="Error communicating with User service ";
     public static final String REST_NOT_FOUND="Restaurant not found for the owner: ";
+    public static final String ROL_INVALID="Invalid rol, can only employee or chef";
 
 }
 

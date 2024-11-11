@@ -3,6 +3,7 @@ package com.restaurant.users.infraestructur.driven_rp.adapter;
 import com.restaurant.users.domain.interfaces.IEncoderPort;
 import com.restaurant.users.domain.interfaces.IUserPersistencePort;
 import com.restaurant.users.domain.model.Employe;
+import com.restaurant.users.domain.model.RoleEnum;
 import com.restaurant.users.domain.model.User;
 import com.restaurant.users.infraestructur.driven_rp.entity.UserEntity;
 import com.restaurant.users.infraestructur.driven_rp.mapper.IMapperUserToEntity;
@@ -69,6 +70,14 @@ public class UserPersistenceImple implements IUserPersistencePort {
     @Override
     public Employe findByEmployeID(int id) {
         Optional<UserEntity> optionalUser = repositoryJpa.findById(id);
+
+        return optionalUser.map(mapperToEntity::toEmploye)
+                .orElse(null);
+    }
+
+    @Override
+    public Employe getChefRestaurantId(Integer restId) {
+        Optional<UserEntity> optionalUser = repositoryJpa.findByRoleAndRestId(RoleEnum.CHEF, restId);
 
         return optionalUser.map(mapperToEntity::toEmploye)
                 .orElse(null);
