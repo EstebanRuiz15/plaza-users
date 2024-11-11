@@ -17,5 +17,6 @@ public final class InfraConstants {
     public static final String AUTHORIZATION="Authorization";
     public static final Integer SEVEN=7;
     public static final String CREATE_CLIENT_SUCCES="Register Client Successfull";
+    public static final String ERROR="error";
 
 }
