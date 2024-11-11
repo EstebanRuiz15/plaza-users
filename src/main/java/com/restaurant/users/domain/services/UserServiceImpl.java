@@ -1,6 +1,8 @@
 package com.restaurant.users.domain.services;
 
 import com.restaurant.users.domain.exception.ErrorExceptionParam;
+import com.restaurant.users.domain.exception.ExceptionRestaurantNotFound;
+import com.restaurant.users.domain.interfaces.IServiceRestaurantFeig;
 import com.restaurant.users.domain.interfaces.IUserPersistencePort;
 import com.restaurant.users.domain.interfaces.IUserService;
 import com.restaurant.users.domain.model.Employe;
@@ -16,9 +18,10 @@ import java.util.regex.Pattern;
 public class UserServiceImpl implements IUserService {
 
 private final IUserPersistencePort persistance;
-
-    public UserServiceImpl(IUserPersistencePort persistance) {
+private final IServiceRestaurantFeig feignClient;
+    public UserServiceImpl(IUserPersistencePort persistance, IServiceRestaurantFeig feignClient) {
         this.persistance = persistance;
+        this.feignClient = feignClient;
     }
 
     @Override
@@ -49,7 +52,9 @@ private final IUserPersistencePort persistance;
     public void createEmployee(User user) {
         isValidParams(user);
         user.setRol(RoleEnum.EMPLOYEE);
-        Integer restId=persistance.getUserId();
+        Integer OwnerId=persistance.getUserId();
+        Integer restId=feignClient.getRestaurantIdtoIdOwner(OwnerId);
+        if(restId == null)throw new ExceptionRestaurantNotFound(ConstantsDomain.REST_NOT_FOUND+OwnerId);
         persistance.saveUserEmployee(user,restId);
     }
 

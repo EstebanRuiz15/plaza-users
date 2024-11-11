@@ -54,6 +54,12 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2', 'io.jsonwebtoken:jjwt-jackson:0.11.2'
 	implementation "org.springframework.security:spring-security-crypto"
 	testImplementation 'org.springframework.security:spring-security-test:5.8.1'
+	implementation 'io.github.openfeign:feign-httpclient:13.2'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.18.0-rc1'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.18.0-rc1'
+	implementation group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.18.0-rc1'
+	implementation group: 'io.github.openfeign', name: 'feign-jackson', version: '13.3'
+	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '4.1.1'
 
 }
 

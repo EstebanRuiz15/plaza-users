@@ -1,5 +1,6 @@
 package com.restaurant.users.aplication;
 
+import com.restaurant.users.domain.interfaces.IServiceRestaurantFeig;
 import com.restaurant.users.domain.interfaces.IUserPersistencePort;
 import com.restaurant.users.domain.services.UserServiceImpl;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -19,8 +20,8 @@ public class BeansConfig {
     }
 
     @Bean
-    public UserServiceImpl getUserServiceImpl(IUserPersistencePort iUserPersistencePort){
-        return new UserServiceImpl(iUserPersistencePort);
+    public UserServiceImpl getUserServiceImpl(IUserPersistencePort iUserPersistencePort, IServiceRestaurantFeig feignClient){
+        return new UserServiceImpl(iUserPersistencePort, feignClient);
     }
 
     @Bean
