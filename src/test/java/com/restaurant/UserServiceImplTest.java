@@ -2,6 +2,7 @@ package com.restaurant;
 
 
 import com.restaurant.users.domain.exception.ErrorExceptionParam;
+import com.restaurant.users.domain.interfaces.IServiceRestaurantFeig;
 import com.restaurant.users.domain.interfaces.IUserPersistencePort;
 import com.restaurant.users.domain.model.RoleEnum;
 import com.restaurant.users.domain.model.User;
@@ -27,7 +28,8 @@ class UserServiceImplTest {
 
     @Mock
     private IUserPersistencePort persistencePort;
-
+    @Mock
+    private IServiceRestaurantFeig feignClient;
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -194,7 +196,7 @@ class UserServiceImplTest {
         Integer idRest = 1;
         when (persistencePort.getUserId()).thenReturn(idRest);
         when(persistencePort.findByEmail(validUser.getEmail())).thenReturn(Optional.empty());
-
+        when(feignClient.getRestaurantIdtoIdOwner(idRest)).thenReturn(idRest);
         userService.createEmployee(validUser);
 
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
